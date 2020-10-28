@@ -49,8 +49,8 @@ package body add is
 		interval  : Time_Span := dist_interval;
 		current_d : Distance_Samples_Type := 0;
 		current_s : Speed_Samples_Type := 0;
-		fdistance : Float;
-		fspeed    : Float;
+		distance  : Float;
+		speed     : Float;
 		d_riesgo  : Float;
 		d_imprud  : Float;
 		d_insegu  : Float;
@@ -62,21 +62,21 @@ package body add is
 			Display_Distance(current_d);
 			Display_Speed(current_s);
 
-			fdistance := Float(current_d);
-			fspeed    := Float(current_s);
+			distance := Float(current_d);
+			speed    := Float(current_s);
 
-			d_riesgo := (((fspeed/10.0)**2)/3.0);
-			d_imprud := (((fspeed/10.0)**2)/2.0);
-			d_insegu := (((fspeed/10.0)**2));
+			d_riesgo := (((speed/10.0)**2)/3.0);
+			d_imprud := (((speed/10.0)**2)/2.0);
+			d_insegu := (((speed/10.0)**2));
 			
-			if (fdistance < d_riesgo) then
+			if (distance < d_riesgo) then
 				Put("................ -> RIESGO_COLISION");
 				Beep(5);
-			elsif (fdistance < d_imprud) then
+			elsif (distance < d_imprud) then
 				Put("................ -> DISTANCIA_IMPRUDENTE");
 				Light(On);
 				Beep(4);
-			elsif (fdistance < d_insegu) then
+			elsif (distance < d_insegu) then
 				Put("................ -> DISTANCIA_INSEGURA");
 				Light(On);
 			else
