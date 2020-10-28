@@ -4,6 +4,7 @@ with System; use System;
 
 with Tools; use Tools;
 with Devices; use Devices;
+with Symptoms; use Symptoms;
 
 -- Packages needed to generate pulse interrupts       
 -- with Ada.Interrupts.Names;
@@ -15,9 +16,12 @@ package body add is
 	-- Constants
 	dist_interval  : Time_Span := Milliseconds(300);
 	steer_interval : Time_Span := Milliseconds(350);
-
-
-
+	
+	DISTPRIO  : constant := 4;
+	STERPRIO  : constant := 5;
+	DISPPRIO  : constant := 1;
+	
+	
 	----------------------------------------------------------------------
 	------------- procedure exported 
 	----------------------------------------------------------------------
@@ -35,11 +39,11 @@ package body add is
 	
 	-- Aqui se declaran las tareas que forman el STR
 	task check_distance is
-		pragma priority(3);
+		pragma priority(DISTPRIO);
 	end check_distance;
 	
 	task check_steer is
-		pragma priority(5);
+		pragma priority(STERPRIO);
 	end check_steer;
 	
 	-----------------------------------------------------------------------
