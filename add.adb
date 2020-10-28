@@ -9,7 +9,14 @@ with Devices; use Devices;
 -- with Ada.Interrupts.Names;
 -- with Pulse_Interrupt; use Pulse_Interrupt;
 
+
 package body add is
+
+	-- Constants
+	dist_interval : Time_Span := Milliseconds(300);
+	head_interval : Time_Span := Milliseconds(400);
+
+
 
 	----------------------------------------------------------------------
 	------------- procedure exported 
@@ -31,6 +38,7 @@ package body add is
 		pragma priority(3);
 	end check_distance;
 	
+	
 	-----------------------------------------------------------------------
 	------------- body of tasks 
 	-----------------------------------------------------------------------
@@ -38,20 +46,44 @@ package body add is
 	-- Aqui se escriben los cuerpos de las tareas 
 	task body check_distance is
 		next_exec : Time;
-		interval  : Time_Span := Milliseconds(200);
+		interval  : Time_Span := dist_interval;
 		current_d : Distance_Samples_Type := 0;
-		current_S : Speed_Samples_Type := 0;
+		current_s : Speed_Samples_Type := 0;
+		fdistance : Float;
+		fspeed    : Float;
+		d_riesgo  : Float;
+		d_imprud  : Float;
+		d_insegu  : Float;
 	begin
-		for i in 1..20 loop
+		next_exec := Clock + interval;
+		loop
 			Reading_Distance(current_d);
 			Reading_Speed(current_s);
 			Display_Distance(current_d);
+			Display_Speed(current_s);
+
+			fdistance := Float(current_d);
+			fspeed    := Float(current_s);
+
+			d_riesgo := (((fspeed/10.0)**2)/3.0);
+			d_imprud := (((fspeed/10.0)**2)/2.0);
+			d_insegu := (((fspeed/10.0)**2));
 			
-			if (current_d < 60 AND current_s > 80) then
-				if (current_d < 30) then
-					Beep(5);
-				end if;
+			if (fdistance < d_riesgo) then
+				Put("................ -> RIESGO_COLISION");
+				Beep(5);
+			elsif (fdistance < d_imprud) then
+				Put("................ -> DISTANCIA_IMPRUDENTE");
+				Light(On);
+				Beep(4);
+			elsif (fdistance < d_insegu) then
+				Put("................ -> DISTANCIA_INSEGURA");
+				Light(On);
+			else
+				Light(Off);
 			end if;
+			
+			
 			delay until next_exec;
 			next_exec := next_exec + interval;
 		end loop;
