@@ -13,8 +13,8 @@ with Devices; use Devices;
 package body add is
 
 	-- Constants
-	dist_interval : Time_Span := Milliseconds(300);
-	head_interval : Time_Span := Milliseconds(400);
+	dist_interval  : Time_Span := Milliseconds(300);
+	steer_interval : Time_Span := Milliseconds(350);
 
 
 
@@ -38,6 +38,9 @@ package body add is
 		pragma priority(3);
 	end check_distance;
 	
+	task check_steer is
+		pragma priority(5);
+	end check_steer;
 	
 	-----------------------------------------------------------------------
 	------------- body of tasks 
@@ -48,7 +51,7 @@ package body add is
 		next_exec : Time;
 		interval  : Time_Span := dist_interval;
 		current_d : Distance_Samples_Type := 0;
-		current_s : Speed_Samples_Type := 0;
+		current_s : Speed_Samples_Type    := 0;
 		distance  : Float;
 		speed     : Float;
 		d_riesgo  : Float;
@@ -88,6 +91,38 @@ package body add is
 			next_exec := next_exec + interval;
 		end loop;
 	end check_distance;
+
+
+	task body check_steer is
+		next_exec     : Time;
+		interval      : Time_Span := steer_interval;
+		last_steer    : Steering_Samples_Type := 0;
+		current_steer : Steering_Samples_Type := 0;
+		current_speed : Speed_Samples_Type    := 0;
+
+		l_angle : Integer;
+		c_angle : Integer;
+		c_speed : Integer;
+	begin
+		next_exec := Clock + interval;
+		loop
+			Reading_Steering(current_steer);
+			Reading_Speed(current_speed);
+
+			l_angle := Integer(last_steer);
+			c_angle := Integer(current_steer);
+			c_speed := Integer(current_speed);
+
+			if ((abs(l_angle - c_angle) >= 20) AND
+			   c_speed >= 40) then
+				Put("................ -> VOLANTAZO");
+				Beep(1);
+			end if;
+
+			delay until next_exec;
+			next_exec := next_exec + interval;
+		end loop;
+	end check_steer;
 
     ----------------------------------------------------------------------
     ------------- procedure para probar los dispositivos 
