@@ -1,4 +1,3 @@
-
 with Kernel.Serial_Output; use Kernel.Serial_Output;
 with Ada.Real_Time; use Ada.Real_Time;
 with System; use System;
@@ -28,7 +27,9 @@ package body add is
 	-----------------------------------------------------------------------
 	
 	-- Aqui se declaran las tareas que forman el STR
-	task check_distance;
+	task check_distance is
+		pragma priority(3);
+	end check_distance;
 	
 	-----------------------------------------------------------------------
 	------------- body of tasks 
@@ -36,22 +37,23 @@ package body add is
 	
 	-- Aqui se escriben los cuerpos de las tareas 
 	task body check_distance is
-	current_distance : Distance_Samples_Type := 0;
-	current_speed    : Speed_Samples_Type    := 0;
+		next_exec : Time;
+		interval  : Time_Span := Milliseconds(200);
+		current_d : Distance_Samples_Type := 0;
+		current_S : Speed_Samples_Type := 0;
 	begin
 		for i in 1..20 loop
-			Reading_Distance(current_distance);
-			Display_Distance(current_distance);
-			Reading_Speed(current_speed);
-
-			if (current_distance < 60 AND current_speed > 80) then
-				if (current_distance < 30) then
+			Reading_Distance(current_d);
+			Reading_Speed(current_s);
+			Display_Distance(current_d);
+			
+			if (current_d < 60 AND current_s > 80) then
+				if (current_d < 30) then
 					Beep(5);
-				else
-					Beep(3);
 				end if;
 			end if;
-			delay until Clock + Milliseconds(200);
+			delay until next_exec;
+			next_exec := next_exec + interval;
 		end loop;
 	end check_distance;
 
@@ -70,7 +72,7 @@ package body add is
 		Current_S: Steering_Samples_Type := 0;
 	begin
 		Starting_Notice ("Prueba_Dispositivo");
-
+		
 		for I in 1..120 loop
          -- Prueba distancia
             --Reading_Distance (Current_D);
