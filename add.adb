@@ -74,8 +74,8 @@ package body add is
 
 			Reading_Distance(current_d);
 			Reading_Speed(current_s);
-			Display_Distance(current_d);
-			Display_Speed(current_s);
+			-- Display_Distance(current_d);
+			-- Display_Speed(current_s);
 
 			distance := Float(current_d);
 			speed    := Float(current_s);
@@ -152,13 +152,15 @@ package body add is
 	end check_steer;
 
 	task body display is
-		next_exec: Time;
-		interval : Time_Span := disp_interval;
-		swerve   : Boolean;
-		lean     : Boolean;
-		unsafeD  : Boolean;
-		imprdD   : Boolean;
-		collision: Boolean;
+		next_exec : Time;
+		interval  : Time_Span := disp_interval;
+		swerve    : Boolean;
+		lean      : Boolean;
+		unsafeD   : Boolean;
+		imprdD    : Boolean;
+		collision : Boolean;
+		current_s : Speed_Samples_Type;
+		current_d : Distance_Samples_Type;
 	begin
 		next_exec := Clock + interval;
 		loop
@@ -168,11 +170,18 @@ package body add is
 			-- symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
 			Symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
 
-			if (swerve = TRUE) then Put(" [DISPLAY] -> VOLANTAZO");
-			elsif(lean = TRUE) then Put(" [DISPLAY] -> CABEZA INCLINADA");
-			elsif(unsafeD = TRUE) then Put(" [DISPLAY] -> DISTANCIA INSEGURA");
-			elsif(imprdD = TRUE) then Put(" [DISPLAY] -> DISTANCIA IMPRUDENTE");
-			elsif(collision = TRUE) then Put(" [DISPLAY] -> RIESGO COLISION");
+			-- Display current distance and Speed
+			Reading_Speed(current_s);
+			Reading_Distance(current_d);
+
+			Display_Speed(current_s); 
+			Display_Distance(current_d);
+
+			if (swerve = TRUE) then Put_Line(" [DISPLAY] -> VOLANTAZO");
+			elsif(lean = TRUE) then Put_Line(" [DISPLAY] -> CABEZA INCLINADA");
+			elsif(unsafeD = TRUE) then Put_Line(" [DISPLAY] -> DISTANCIA INSEGURA");
+			elsif(imprdD = TRUE) then Put_Line(" [DISPLAY] -> DISTANCIA IMPRUDENTE");
+			elsif(collision = TRUE) then Put_Line(" [DISPLAY] -> RIESGO COLISION");
 			end if;
 
 			Finishing_Notice("DISPLAY");
