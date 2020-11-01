@@ -166,7 +166,11 @@ package body add is
 			-- symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
 			Symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
 
-			if (swerve = TRUE) then 
+			if (swerve = TRUE) then Put(" [DISPLAY] -> VOLANTAZO");
+			elsif(lean = TRUE) then Put(" [DISPLAY] -> CABEZA INCLINADA");
+			elsif(unsafeD = TRUE) then Put(" [DISPLAY] -> DISTANCIA INSEGURA");
+			elsif(imprdD = TRUE) then Put(" [DISPLAY] -> DISTANCIA IMPRUDENTE");
+			elsif(collision = TRUE) then Put(" [DISPLAY] -> RIESGO COLISION");
 
 			Finishing_Notice("DISPLAY");
 
