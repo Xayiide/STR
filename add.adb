@@ -127,6 +127,8 @@ package body add is
 		loop
 			Starting_Notice("CHECK_STEER");
 
+			Display_Steering(current_steer);
+
 			Reading_Steering(current_steer);
 			Reading_Speed(current_speed);
 
