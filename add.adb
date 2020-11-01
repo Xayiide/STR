@@ -85,22 +85,22 @@ package body add is
 			d_insegu := (((speed/10.0)**2));
 			
 			if (distance < d_riesgo) then
-				symptoms.setCollision(TRUE);
+				symptoms.prsymptoms.setCollision(TRUE);
 				Put("................ -> RIESGO_COLISION");
 				Beep(5);
 			elsif (distance < d_imprud) then
-				symptoms.setImprdD(TRUE);
+				symptoms.prsymptoms.setImprdD(TRUE);
 				Put("................ -> DISTANCIA_IMPRUDENTE");
 				Light(On);
 				Beep(4);
 			elsif (distance < d_insegu) then
-				symptoms.setUnsafeD(TRUE);
+				symptoms.prsymptoms.setUnsafeD(TRUE);
 				Put("................ -> DISTANCIA_INSEGURA");
 				Light(On);
 			else
-				symptoms.setCollision(FALSE);
-				symptoms.setImprdD(FALSE);
-				symptoms.setUnsafeD(FALSE);
+				symptoms.prsymptoms.setCollision(FALSE);
+				symptoms.prsymptoms.setImprdD(FALSE);
+				symptoms.prsymptoms.setUnsafeD(FALSE);
 				Light(Off);
 			end if;
 			
@@ -135,11 +135,11 @@ package body add is
 			c_speed := Integer(current_speed);
 
 			if ((abs(l_angle - c_angle) >= 20) AND (c_speed >= 40)) then
-				symptoms.setSwerve(TRUE);
+				symptoms.prsymptoms.setSwerve(TRUE);
 				Put("................ -> VOLANTAZO");
 				Beep(1);
 			else
-				symptoms.setSwerve(FALSE); -- Clean symptom
+				symptoms.prsymptoms.setSwerve(FALSE); -- Clean symptom
 			end if;
 			
 			Finishing_Notice("CHECK_STEER");
@@ -151,7 +151,7 @@ package body add is
 
 	task body display is
 		next_exec: Time;
-		interval : Time_Span: = disp_interval;
+		interval : Time_Span := disp_interval;
 		swerve   : Boolean;
 		lean     : Boolean;
 		unsafeD  : Boolean;
@@ -171,6 +171,7 @@ package body add is
 			elsif(unsafeD = TRUE) then Put(" [DISPLAY] -> DISTANCIA INSEGURA");
 			elsif(imprdD = TRUE) then Put(" [DISPLAY] -> DISTANCIA IMPRUDENTE");
 			elsif(collision = TRUE) then Put(" [DISPLAY] -> RIESGO COLISION");
+			end if;
 
 			Finishing_Notice("DISPLAY");
 

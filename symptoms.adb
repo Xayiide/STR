@@ -64,17 +64,17 @@ package body symptoms is
 		
 	end prsymptoms;
 
-	procedure readSymptoms(S : out Boolean,
-						   L : Out Boolean,
-						   U : Out Boolean,
-						   I : Out Boolean,
+	procedure readSymptoms(S : out Boolean;
+						   L : Out Boolean;
+						   U : Out Boolean;
+						   I : Out Boolean;
 						   C : Out Boolean) is
 	begin
-		getSwerve(S);
-		getLean(L);
-		getUnsafeD(U);
-		getImprdD(I);
-		getCollision(C);
+		prSymptoms.getSwerve(S);
+		prSymptoms.getLean(L);
+		prSymptoms.getUnsafeD(U);
+		prSymptoms.getImprdD(I);
+		prSymptoms.getCollision(C);
 	end readSymptoms;
 
 
