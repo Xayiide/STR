@@ -4,7 +4,7 @@ with System; use System;
 
 with Tools; use Tools;
 with Devices; use Devices;
-with Symptoms; use Symptoms;
+with Symptoms; -- use Symptoms;
 
 -- Packages needed to generate pulse interrupts       
 -- with Ada.Interrupts.Names;
@@ -16,6 +16,7 @@ package body add is
 	-- Constants
 	dist_interval  : Time_Span := Milliseconds(300);
 	steer_interval : Time_Span := Milliseconds(350);
+	disp_interval  : Time_Span := Milliseconds(1000);
 	
 	DISTPRIO  : constant := 4;
 	STERPRIO  : constant := 5;
@@ -45,6 +46,10 @@ package body add is
 	task check_steer is
 		pragma priority(STERPRIO);
 	end check_steer;
+
+	task display is
+		pragma priority(DISPPRIO);
+	end display;
 	
 	-----------------------------------------------------------------------
 	------------- body of tasks 
@@ -64,6 +69,9 @@ package body add is
 	begin
 		next_exec := Clock + interval;
 		loop
+
+			Starting_Notice("CHECK_DISTANCE");
+
 			Reading_Distance(current_d);
 			Reading_Speed(current_s);
 			Display_Distance(current_d);
@@ -77,20 +85,27 @@ package body add is
 			d_insegu := (((speed/10.0)**2));
 			
 			if (distance < d_riesgo) then
+				symptoms.setCollision(TRUE);
 				Put("................ -> RIESGO_COLISION");
 				Beep(5);
 			elsif (distance < d_imprud) then
+				symptoms.setImprdD(TRUE);
 				Put("................ -> DISTANCIA_IMPRUDENTE");
 				Light(On);
 				Beep(4);
 			elsif (distance < d_insegu) then
+				symptoms.setUnsafeD(TRUE);
 				Put("................ -> DISTANCIA_INSEGURA");
 				Light(On);
 			else
+				symptoms.setCollision(FALSE);
+				symptoms.setImprdD(FALSE);
+				symptoms.setUnsafeD(FALSE);
 				Light(Off);
 			end if;
 			
-			
+			Finishing_Notice("CHECK_DISTANCE");
+
 			delay until next_exec;
 			next_exec := next_exec + interval;
 		end loop;
@@ -110,6 +125,8 @@ package body add is
 	begin
 		next_exec := Clock + interval;
 		loop
+			Starting_Notice("CHECK_STEER");
+
 			Reading_Steering(current_steer);
 			Reading_Speed(current_speed);
 
@@ -117,16 +134,48 @@ package body add is
 			c_angle := Integer(current_steer);
 			c_speed := Integer(current_speed);
 
-			if ((abs(l_angle - c_angle) >= 20) AND
-			   c_speed >= 40) then
+			if ((abs(l_angle - c_angle) >= 20) AND (c_speed >= 40)) then
+				symptoms.setSwerve(TRUE);
 				Put("................ -> VOLANTAZO");
 				Beep(1);
+			else
+				symptoms.setSwerve(FALSE); -- Clean symptom
 			end if;
+			
+			Finishing_Notice("CHECK_STEER");
 
 			delay until next_exec;
 			next_exec := next_exec + interval;
 		end loop;
 	end check_steer;
+
+	task body display is
+		next_exec: Time;
+		interval : Time_Span: = disp_interval;
+		swerve   : Boolean;
+		lean     : Boolean;
+		unsafeD  : Boolean;
+		imprdD   : Boolean;
+		collision: Boolean;
+	begin
+		next_exec := Clock + interval;
+		loop
+		
+			Starting_Notice("DISPLAY");
+			-- Read symptoms protected object
+			-- symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
+			Symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
+
+			if (swerve = TRUE) then 
+
+			Finishing_Notice("DISPLAY");
+
+			delay until next_exec;
+			next_exec := next_exec + interval;
+		end loop;
+	end display;
+
+
 
     ----------------------------------------------------------------------
     ------------- procedure para probar los dispositivos 

@@ -20,4 +20,11 @@ package symptoms is
 		imprdD    : Boolean; 
 		collision : Boolean; 
 	end prsymptoms;
+
+	procedure readSymptoms(S : out Boolean,
+						   L : Out Boolean,
+						   U : Out Boolean,
+						   I : Out Boolean,
+						   C : Out Boolean);
+
 end symptoms;

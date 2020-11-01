@@ -63,6 +63,21 @@ package body symptoms is
 		end getCollision;
 		
 	end prsymptoms;
+
+	procedure readSymptoms(S : out Boolean,
+						   L : Out Boolean,
+						   U : Out Boolean,
+						   I : Out Boolean,
+						   C : Out Boolean) is
+	begin
+		getSwerve(S);
+		getLean(L);
+		getUnsafeD(U);
+		getImprdD(I);
+		getCollision(C);
+	end readSymptoms;
+
+
 begin
 	null;
 end symptoms;
