@@ -88,16 +88,16 @@ package body add is
 			
 			if (distance < d_riesgo) then
 				symptoms.prsymptoms.setCollision(TRUE);
-				Put("................ -> RIESGO_COLISION");
+				Put("................ -> RIESGO_COLISION [B5]");
 				Beep(5);
 			elsif (distance < d_imprud) then
 				symptoms.prsymptoms.setImprdD(TRUE);
-				Put("................ -> DISTANCIA_IMPRUDENTE");
+				Put("................ -> DISTANCIA_IMPRUDENTE [L+B4]");
 				Light(On);
 				Beep(4);
 			elsif (distance < d_insegu) then
 				symptoms.prsymptoms.setUnsafeD(TRUE);
-				Put("................ -> DISTANCIA_INSEGURA");
+				Put("................ -> DISTANCIA_INSEGURA [L]");
 				Light(On);
 			else
 				symptoms.prsymptoms.setCollision(FALSE);
@@ -142,7 +142,7 @@ package body add is
 
 			if ((abs(l_angle - c_angle) >= 20) AND (c_speed >= 40)) then
 				symptoms.prsymptoms.setSwerve(TRUE);
-				Put("................ -> VOLANTAZO");
+				Put("................ -> VOLANTAZO [B1]");
 				Beep(1);
 			else
 				symptoms.prsymptoms.setSwerve(FALSE); -- Clean symptom
