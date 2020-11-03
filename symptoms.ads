@@ -1,6 +1,6 @@
 
 package symptoms is
-	protected prsymptoms is
+	protected prSymptoms is
 		procedure setSwerve   (S: in Boolean);
 		procedure setLean     (L: in Boolean);
 		procedure setUnsafeD  (U: in Boolean);
@@ -19,7 +19,7 @@ package symptoms is
 		unsafeD   : Boolean;
 		imprdD    : Boolean; 
 		collision : Boolean; 
-	end prsymptoms;
+	end prSymptoms;
 
 	procedure readSymptoms(S : out Boolean;
 						   L : Out Boolean;

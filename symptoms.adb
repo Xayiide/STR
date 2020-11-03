@@ -1,5 +1,5 @@
 package body symptoms is
-	protected body prsymptoms is
+	protected body prSymptoms is
 		procedure setSwerve (S: in Boolean) is
 		begin
 			swerve := S;
@@ -74,7 +74,7 @@ package body symptoms is
 			C := collision;
 		end getCollision;
 		
-	end prsymptoms;
+	end prSymptoms;
 
 	procedure readSymptoms(S : out Boolean;
 						   L : Out Boolean;
