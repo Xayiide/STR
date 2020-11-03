@@ -55,8 +55,8 @@ package body add is
 	-----------------------------------------------------------------------
 	------------- body of tasks 
 	-----------------------------------------------------------------------
-	
-	-- Aqui se escriben los cuerpos de las tareas 
+	-- TODO: Quitar Puts (Deberian ir a Display, excepto tracing)
+	--       Quitar Actuadores [BEEP, Lights] (Deberian ir a Riesgos)
 	task body check_distance is
 		next_exec : Time;
 		interval  : Time_Span := dist_interval;
@@ -70,11 +70,12 @@ package body add is
 	begin
 		next_exec := Clock + interval;
 		loop
-
 			Starting_Notice("CHECK_DISTANCE");
 
 			Reading_Distance(current_d);
 			Reading_Speed(current_s);
+			Measurements.prMeasurements.setmdistance(current_d);
+			Measurements.prMeasurements.setmspeed(current_s);
 			-- Display_Distance(current_d);
 			-- Display_Speed(current_s);
 
@@ -113,6 +114,8 @@ package body add is
 	end check_distance;
 
 
+	-- TODO: Quitar Puts (Deberian ir a Display, excepto tracing)
+	--       Quitar Actuadores [BEEP, Lights] (Deberian ir a Riesgos)
 	task body check_steer is
 		next_exec     : Time;
 		interval      : Time_Span := steer_interval;
@@ -171,9 +174,9 @@ package body add is
 			-- symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
 			Symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
 
-			-- Display current distance and Speed
-			Reading_Speed(current_s);
-			Reading_Distance(current_d);
+			Measurements.prMeasurements.readMeasurements(current_d, current_s);
+			-- Reading_Speed(current_s);
+			-- Reading_Distance(current_d);
 
 			Display_Speed(current_s); 
 			Display_Distance(current_d);
