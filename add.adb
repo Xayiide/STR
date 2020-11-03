@@ -80,8 +80,8 @@ package body add is
 
 			Reading_Distance(current_d);
 			Reading_Speed(current_s);
-			Measurements.prMeasurements.setmdistance(current_d);
-			Measurements.prMeasurements.setmspeed(current_s);
+			measurements.prMeasurements.setmdistance(current_d);
+			measurements.prMeasurements.setmspeed(current_s);
 			-- Display_Distance(current_d);
 			-- Display_Speed(current_s);
 
@@ -93,22 +93,22 @@ package body add is
 			d_insegu := (((speed/10.0)**2));
 			
 			if (distance < d_riesgo) then
-				symptoms.prsymptoms.setCollision(TRUE);
+				symptoms.prSymptoms.setCollision(TRUE);
 				Put("................ -> RIESGO_COLISION [B5]");
 				Beep(5);
 			elsif (distance < d_imprud) then
-				symptoms.prsymptoms.setImprdD(TRUE);
+				symptoms.prSymptoms.setImprdD(TRUE);
 				Put("................ -> DISTANCIA_IMPRUDENTE [L+B4]");
 				Light(On);
 				Beep(4);
 			elsif (distance < d_insegu) then
-				symptoms.prsymptoms.setUnsafeD(TRUE);
+				symptoms.prSymptoms.setUnsafeD(TRUE);
 				Put("................ -> DISTANCIA_INSEGURA [L]");
 				Light(On);
 			else
-				symptoms.prsymptoms.setCollision(FALSE);
-				symptoms.prsymptoms.setImprdD(FALSE);
-				symptoms.prsymptoms.setUnsafeD(FALSE);
+				symptoms.prSymptoms.setCollision(FALSE);
+				symptoms.prSymptoms.setImprdD(FALSE);
+				symptoms.prSymptoms.setUnsafeD(FALSE);
 				if light_st = On then
 					Light(Off);
 			end if;
@@ -148,11 +148,11 @@ package body add is
 			c_speed := Integer(current_speed);
 
 			if ((abs(l_angle - c_angle) >= 20) AND (c_speed >= 40)) then
-				symptoms.prsymptoms.setSwerve(TRUE);
+				symptoms.prSymptoms.setSwerve(TRUE);
 				Put("................ -> VOLANTAZO [B1]");
 				Beep(1);
 			else
-				symptoms.prsymptoms.setSwerve(FALSE); -- Clean symptom
+				symptoms.prSymptoms.setSwerve(FALSE); -- Clean symptom
 			end if;
 			
 			Finishing_Notice("CHECK_STEER");
@@ -180,9 +180,9 @@ package body add is
 			Starting_Notice("DISPLAY");
 			-- Read symptoms protected object
 			-- symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
-			Symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
+			symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
 
-			Measurements.readMeasurements(current_d, current_s);
+			measurements.readMeasurements(current_d, current_s);
 			-- Reading_Speed(current_s);
 			-- Reading_Distance(current_d);
 
@@ -205,7 +205,50 @@ package body add is
 
 
 	task body risks is
+		next_exec : Time;
+		interval  : Time_Span := risk_interval;	
+		swerve    : Boolean;
+		lean      : Boolean;
+		unsafeD   : Boolean;
+		imprdD    : Boolean;
+		collision : Boolean;
+		current_s : Speed_Samples_Type;
+		current_d : Distance_Samples_Type;
 	begin
+		next_exec := Clock + interval;
+		loop
+			symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
+			measurements.readMeasurements(current_d, current_s);
+
+			if (swerve = TRUE) then
+				Beep(1);
+			end if;
+
+			if (lean = TRUE) then
+				if (current_s > 70) then
+					Beep(3);
+				else
+					Beep(2);
+				end if;
+			end if;
+
+			if (unsafeD = TRUE) then
+				Light(On);
+			end if;
+
+			if (imprdD = TRUE) then
+				Light(On);
+				Beep(4);
+			end if;
+
+			if ((collision = TRUE) AND (lean = TRUE)) then
+				Activate_Brake;
+				Beep(5);
+			end if;
+
+			delay until next_exec;
+			next_exec := next_exec + interval;
+		end loop;
 	end risks;
 
     ----------------------------------------------------------------------
