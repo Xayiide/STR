@@ -111,6 +111,7 @@ package body add is
 				symptoms.prSymptoms.setUnsafeD(FALSE);
 				if light_st = On then
 					Light(Off);
+				end if;
 			end if;
 			
 			Finishing_Notice("CHECK_DISTANCE");
