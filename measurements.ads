@@ -1,7 +1,7 @@
 with devices; use devices; -- Para los tipos
 
 package measurements is
-	protected prmeasurements is
+	protected prMeasurements is
 		procedure setmdistance(D : in Distance_Samples_Type);
 		procedure setmspeed(S : in Speed_Samples_Type);
 
@@ -12,7 +12,7 @@ package measurements is
 		mdistance : Distance_Samples_Type;
 		mspeed    : Speed_Samples_Type;
 
-	end prmeasurements;
+	end prMeasurements;
 
 	procedure readMeasurements(D : out Distance_Samples_Type;
 							   S : out Speed_Samples_Type);

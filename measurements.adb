@@ -1,7 +1,7 @@
 with devices; use devices;
 
 package body measurements is	
-	protected body prmeasurements is
+	protected body prMeasurements is
 		procedure setmdistance (D : in Distance_Samples_Type) is
 		begin
 			mdistance := D;
@@ -26,5 +26,16 @@ package body measurements is
 			S := mspeed;
 		end getmspeed;
 
-	end prmeasurements;
+	end prMeasurements;
+
+
+	procedure readMeasurements(D : out Distance_Samples_Type;
+							   S : out Speed_Samples_Type) is
+	begin
+		prMeasurements.getmdistance(D);
+		prMeasurements.getmspeed(S);
+	end readMeasurements;
+
+
+
 end measurements;
