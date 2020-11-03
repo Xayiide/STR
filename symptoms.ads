@@ -1,11 +1,11 @@
 
 package symptoms is
 	protected prsymptoms is
-		procedure setSwerve   (S: in Boolean );
-		procedure setLean     (L: in Boolean );
-		procedure setUnsafeD  (U: in Boolean );
-		procedure setImprdD   (I: in Boolean );
-		procedure setCollision(C: in Boolean );
+		procedure setSwerve   (S: in Boolean);
+		procedure setLean     (L: in Boolean);
+		procedure setUnsafeD  (U: in Boolean);
+		procedure setImprdD   (I: in Boolean);
+		procedure setCollision(C: in Boolean);
 		
 		procedure getSwerve   (S: out Boolean);
 		procedure getLean     (L: out Boolean);
