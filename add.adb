@@ -18,9 +18,11 @@ package body add is
 	dist_interval  : Time_Span := Milliseconds(300);
 	steer_interval : Time_Span := Milliseconds(350);
 	disp_interval  : Time_Span := Milliseconds(1000);
-	
-	DISTPRIO  : constant := 4;
+	risk_interval  : Time_Span := Milliseconds(150);
+
+	RISKPRIO  : constant := 10; -- Highest Prio I guess
 	STERPRIO  : constant := 5;
+	DISTPRIO  : constant := 4;
 	DISPPRIO  : constant := 1;
 	
 	light_st  : Light_States := Off;
@@ -51,6 +53,10 @@ package body add is
 	task display is
 		pragma priority(DISPPRIO);
 	end display;
+
+	task risks is
+		pragma priority(RISKPRIO);
+	end risks;
 	
 	-----------------------------------------------------------------------
 	------------- body of tasks 
@@ -105,7 +111,6 @@ package body add is
 				symptoms.prsymptoms.setUnsafeD(FALSE);
 				if light_st = On then
 					Light(Off);
-				end if;
 			end if;
 			
 			Finishing_Notice("CHECK_DISTANCE");
@@ -157,6 +162,7 @@ package body add is
 		end loop;
 	end check_steer;
 
+
 	task body display is
 		next_exec : Time;
 		interval  : Time_Span := disp_interval;
@@ -198,6 +204,9 @@ package body add is
 	end display;
 
 
+	task body risks is
+	begin
+	end risks;
 
     ----------------------------------------------------------------------
     ------------- procedure para probar los dispositivos 
