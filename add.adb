@@ -5,6 +5,7 @@ with System; use System;
 with Tools; use Tools;
 with Devices; use Devices;
 with Symptoms; -- use Symptoms;
+with Measurements; -- use Measurements;
 
 -- Packages needed to generate pulse interrupts       
 -- with Ada.Interrupts.Names;
