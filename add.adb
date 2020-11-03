@@ -238,15 +238,19 @@ package body add is
 
 			if (unsafeD = TRUE) then
 				Light(On);
+				light_st = On;
 			elsif (light_st = On) then
 				Light(Off);
+				light_st = Off;
 			end if;
 
 			if (imprdD = TRUE) then
 				Light(On);
+				light_st = On;
 				Beep(4);
 			elsif (light_st = On) then
 				Light(Off);
+				light_st = Off;
 			end if;
 
 			if ((collision = TRUE) AND (lean = TRUE)) then
