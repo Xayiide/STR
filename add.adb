@@ -23,7 +23,7 @@ package body add is
 	STERPRIO  : constant := 5;
 	DISPPRIO  : constant := 1;
 	
-	
+	light_st  : Light_States := Off;
 	----------------------------------------------------------------------
 	------------- procedure exported 
 	----------------------------------------------------------------------
@@ -103,7 +103,9 @@ package body add is
 				symptoms.prsymptoms.setCollision(FALSE);
 				symptoms.prsymptoms.setImprdD(FALSE);
 				symptoms.prsymptoms.setUnsafeD(FALSE);
-				Light(Off);
+				if light_st = On then
+					Light(Off);
+				end if;
 			end if;
 			
 			Finishing_Notice("CHECK_DISTANCE");
