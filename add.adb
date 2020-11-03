@@ -94,24 +94,21 @@ package body add is
 			
 			if (distance < d_riesgo) then
 				symptoms.prSymptoms.setCollision(TRUE);
-				Put("................ -> RIESGO_COLISION [B5]");
-				Beep(5);
+				Put_Line("................ -> RIESGO_COLISION [B5]");
+				-- Beep(5);
 			elsif (distance < d_imprud) then
 				symptoms.prSymptoms.setImprdD(TRUE);
-				Put("................ -> DISTANCIA_IMPRUDENTE [L+B4]");
-				Light(On);
-				Beep(4);
+				Put_Line("................ -> DISTANCIA_IMPRUDENTE [L+B4]");
+				-- Light(On);
+				-- Beep(4);
 			elsif (distance < d_insegu) then
 				symptoms.prSymptoms.setUnsafeD(TRUE);
-				Put("................ -> DISTANCIA_INSEGURA [L]");
-				Light(On);
+				Put_Line("................ -> DISTANCIA_INSEGURA [L]");
+				-- Light(On);
 			else
 				symptoms.prSymptoms.setCollision(FALSE);
 				symptoms.prSymptoms.setImprdD(FALSE);
 				symptoms.prSymptoms.setUnsafeD(FALSE);
-				if light_st = On then
-					Light(Off);
-				end if;
 			end if;
 			
 			Finishing_Notice("CHECK_DISTANCE");
@@ -150,8 +147,8 @@ package body add is
 
 			if ((abs(l_angle - c_angle) >= 20) AND (c_speed >= 40)) then
 				symptoms.prSymptoms.setSwerve(TRUE);
-				Put("................ -> VOLANTAZO [B1]");
-				Beep(1);
+				Put_Line("................ -> VOLANTAZO [B1]");
+				-- Beep(1);
 			else
 				symptoms.prSymptoms.setSwerve(FALSE); -- Clean symptom
 			end if;
@@ -190,11 +187,16 @@ package body add is
 			Display_Speed(current_s); 
 			Display_Distance(current_d);
 
-			if (swerve = TRUE) then Put_Line(" [DISPLAY] -> VOLANTAZO");
-			elsif(lean = TRUE) then Put_Line(" [DISPLAY] -> CABEZA INCLINADA");
-			elsif(unsafeD = TRUE) then Put_Line(" [DISPLAY] -> DISTANCIA INSEGURA");
-			elsif(imprdD = TRUE) then Put_Line(" [DISPLAY] -> DISTANCIA IMPRUDENTE");
-			elsif(collision = TRUE) then Put_Line(" [DISPLAY] -> RIESGO COLISION");
+			if ((swerve = TRUE) AND (current_s > 40)) then
+				Put_Line(" [DISPLAY] -> VOLANTAZO");
+			elsif (lean = TRUE) then
+				Put_Line(" [DISPLAY] -> CABEZA INCLINADA");
+			elsif (unsafeD = TRUE) then
+				Put_Line(" [DISPLAY] -> DISTANCIA INSEGURA");
+			elsif (imprdD = TRUE)
+				then Put_Line(" [DISPLAY] -> DISTANCIA IMPRUDENTE");
+			elsif (collision = TRUE)
+				then Put_Line(" [DISPLAY] -> RIESGO COLISION");
 			end if;
 
 			Finishing_Notice("DISPLAY");
@@ -218,10 +220,11 @@ package body add is
 	begin
 		next_exec := Clock + interval;
 		loop
+			Starting_Notice("RISKS");
 			symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
 			measurements.readMeasurements(current_d, current_s);
 
-			if (swerve = TRUE) then
+			if ((swerve = TRUE) AND (current_s > 40)) then
 				Beep(1);
 			end if;
 
@@ -235,18 +238,22 @@ package body add is
 
 			if (unsafeD = TRUE) then
 				Light(On);
+			elsif (light_st = On) then
+				Light(Off);
 			end if;
 
 			if (imprdD = TRUE) then
 				Light(On);
 				Beep(4);
+			elsif (light_st = On) then
+				Light(Off);
 			end if;
 
 			if ((collision = TRUE) AND (lean = TRUE)) then
 				Activate_Brake;
 				Beep(5);
 			end if;
-
+			Finishing_Notice("RISKS");
 			delay until next_exec;
 			next_exec := next_exec + interval;
 		end loop;
