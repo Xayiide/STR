@@ -16,8 +16,8 @@ package body symptoms is
 		begin
 			unsafeD := U;
 			if (U = TRUE) then
-				imprdD    = FALSE;
-				collision = FALSE;
+				imprdD    := FALSE;
+				collision := FALSE;
 			end if;
 		end setUnsafeD;
 		
@@ -26,8 +26,8 @@ package body symptoms is
 		begin
 			imprdD := I;
 			if (I = TRUE) then
-				unsafeD   = FALSE;
-				collision = FALSE;
+				unsafeD   := FALSE;
+				collision := FALSE;
 			end if;
 		end setImprdD;
 		
@@ -36,8 +36,8 @@ package body symptoms is
 		begin
 			collision := C;
 			if (C = TRUE) then
-				unsafeD = FALSE;
-				imprdD  = FALSE;
+				unsafeD := FALSE;
+				imprdD  := FALSE;
 			end if;
 		end setCollision;
 		
