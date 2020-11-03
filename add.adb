@@ -224,6 +224,12 @@ package body add is
 			symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
 			measurements.readMeasurements(current_d, current_s);
 
+			-- Turn off the light here? TODO: check this
+			if (light_st = On) then
+				Light(Off);
+				light_st := Off;
+			end if;
+
 			if ((swerve = TRUE) AND (current_s > 40)) then
 				Beep(1);
 			end if;
@@ -238,19 +244,21 @@ package body add is
 
 			if (unsafeD = TRUE) then
 				Light(On);
-				light_st = On;
+				light_st := On;
 			elsif (light_st = On) then
 				Light(Off);
-				light_st = Off;
+				light_st := Off;
 			end if;
 
 			if (imprdD = TRUE) then
 				Light(On);
-				light_st = On;
+				light_st := On;
 				Beep(4);
-			elsif (light_st = On) then
+			elsif ((light_st = On) AND (unsafeD = FALSE)) then
+				-- Second check to avoid this if to turn off the light for
+				-- unsafeD
 				Light(Off);
-				light_st = Off;
+				light_st := Off;
 			end if;
 
 			if ((collision = TRUE) AND (lean = TRUE)) then
