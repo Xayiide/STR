@@ -72,8 +72,8 @@ package body add is
 	task body check_distance is
 		next_exec : Time;
 		interval  : Time_Span := dist_interval;
-		current_d : Distance_Samples_Type := 0;
-		current_s : Speed_Samples_Type    := 0;
+		curr_d    : Distance_Samples_Type := 0;
+		curr_s    : Speed_Samples_Type    := 0;
 		distance  : Float;
 		speed     : Float;
 		d_riesgo  : Float;
@@ -84,15 +84,15 @@ package body add is
 		loop
 			Starting_Notice("CHECK_DISTANCE");
 
-			Reading_Distance(current_d);
-			Reading_Speed(current_s);
-			measurements.prMeasurements.setmdistance(current_d);
-			measurements.prMeasurements.setmspeed(current_s);
+			Reading_Distance(curr_d);
+			Reading_Speed(curr_s);
+			measurements.prMeasurements.setmdistance(curr_d);
+			measurements.prMeasurements.setmspeed(curr_s);
 			-- Display_Distance(current_d);
 			-- Display_Speed(current_s);
 
-			distance := Float(current_d);
-			speed    := Float(current_s);
+			distance := Float(curr_d);
+			speed    := Float(curr_s);
 
 			d_riesgo := (((speed/10.0)**2)/3.0);
 			d_imprud := (((speed/10.0)**2)/2.0);
@@ -128,11 +128,11 @@ package body add is
 	-- TODO: Quitar Puts (Deberian ir a Display, excepto tracing)
 	--       Quitar Actuadores [BEEP, Lights] (Deberian ir a Riesgos)
 	task body check_steer is
-		next_exec     : Time;
-		interval      : Time_Span := steer_interval;
-		last_steer    : Steering_Samples_Type := 0;
-		current_steer : Steering_Samples_Type := 0;
-		current_speed : Speed_Samples_Type    := 0;
+		next_exec  : Time;
+		interval   : Time_Span := steer_interval;
+		last_steer : Steering_Samples_Type := 0;
+		curr_steer : Steering_Samples_Type := 0;
+		curr_speed : Speed_Samples_Type    := 0;
 
 		l_steer : Integer;
 		c_steer : Integer;
@@ -142,14 +142,14 @@ package body add is
 		loop
 			Starting_Notice("CHECK_STEER");
 
-			Reading_Steering(current_steer);
-			Reading_Speed(current_speed);
+			Reading_Steering(curr_steer);
+			Reading_Speed(curr_speed);
 
-			Display_Steering(current_steer);
+			Display_Steering(curr_steer);
 
 			l_steer := Integer(last_steer);
-			c_steer := Integer(current_steer);
-			c_speed := Integer(current_speed);
+			c_steer := Integer(curr_steer);
+			c_speed := Integer(curr_speed);
 
 			if ((abs(l_steer - c_steer) >= 20) AND (c_speed >= 40)) then
 				symptoms.prSymptoms.setSwerve(TRUE);
@@ -159,7 +159,7 @@ package body add is
 				symptoms.prSymptoms.setSwerve(FALSE); -- Clean symptom
 			end if;
 
-			last_steer := current_steer;
+			last_steer := curr_steer;
 			
 			Finishing_Notice("CHECK_STEER");
 
@@ -170,15 +170,22 @@ package body add is
 
 
 	task body check_head is
-		next_exec     : Time;
-		interval      : Time_Span: = head_interval;
-		current_h     : HeadPosition_Samples_Type;
-		current_steer : Steering_Samples_Type;
+		next_exec  : Time;
+		interval   : Time_Span                  := head_interval;
+		curr_hp    : HeadPosition_Samples_Type;
+		curr_steer : Steering_Samples_Type;
+		last_hp    : HeadPosition_Samples_Type  := 0;
+		last_steer : Steering_Samples_Type      := 0;
 	begin
 		next_exec := Clock + interval;
 		loop
 			Starting_Notice("HEAD");
 
+			Reading_HeadPosition(curr_hp);
+			Reading_Steering(curr_steer);
+
+			if (()) then
+			end if;
 
 			Finishing_Notice("HEAD");
 			delay until next_exec;
