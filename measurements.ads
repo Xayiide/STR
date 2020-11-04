@@ -2,6 +2,7 @@ with devices; use devices; -- Para los tipos
 
 package measurements is
 	protected prMeasurements is
+		pragma priority(10); -- Risks task priority 
 		procedure setmdistance(D : in Distance_Samples_Type);
 		procedure setmspeed(S : in Speed_Samples_Type);
 

@@ -1,6 +1,7 @@
 
 package symptoms is
 	protected prSymptoms is
+		pragma priority(10); -- Risks task priority
 		procedure setSwerve   (S: in Boolean);
 		procedure setLean     (L: in Boolean);
 		procedure setUnsafeD  (U: in Boolean);
