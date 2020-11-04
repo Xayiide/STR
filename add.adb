@@ -17,13 +17,15 @@ package body add is
 	-- Constants
 	dist_interval  : Time_Span := Milliseconds(300);
 	steer_interval : Time_Span := Milliseconds(350);
+	head_interval  : Time_Span := Milliseconds(400);
 	disp_interval  : Time_Span := Milliseconds(1000);
 	risk_interval  : Time_Span := Milliseconds(150);
 
-	RISKPRIO  : constant := 10; -- Highest Prio I guess
-	STERPRIO  : constant := 5;
-	DISTPRIO  : constant := 4;
-	DISPPRIO  : constant := 1;
+	RISKPRIO : constant := 10; -- Highest Prio I guess
+	STERPRIO : constant := 5;
+	DISTPRIO : constant := 4;
+	HEADPRIO : constant := 3;
+	DISPPRIO : constant := 1;
 	
 	light_st  : Light_States := Off;
 	----------------------------------------------------------------------
@@ -49,6 +51,10 @@ package body add is
 	task check_steer is
 		pragma priority(STERPRIO);
 	end check_steer;
+
+	task check_head is
+		pragma priority(HEADPRIO);
+	end check_head;
 
 	task display is
 		pragma priority(DISPPRIO);
@@ -128,30 +134,32 @@ package body add is
 		current_steer : Steering_Samples_Type := 0;
 		current_speed : Speed_Samples_Type    := 0;
 
-		l_angle : Integer;
-		c_angle : Integer;
+		l_steer : Integer;
+		c_steer : Integer;
 		c_speed : Integer;
 	begin
 		next_exec := Clock + interval;
 		loop
 			Starting_Notice("CHECK_STEER");
 
-			Display_Steering(current_steer);
-
 			Reading_Steering(current_steer);
 			Reading_Speed(current_speed);
 
-			l_angle := Integer(last_steer);
-			c_angle := Integer(current_steer);
+			Display_Steering(current_steer);
+
+			l_steer := Integer(last_steer);
+			c_steer := Integer(current_steer);
 			c_speed := Integer(current_speed);
 
-			if ((abs(l_angle - c_angle) >= 20) AND (c_speed >= 40)) then
+			if ((abs(l_steer - c_steer) >= 20) AND (c_speed >= 40)) then
 				symptoms.prSymptoms.setSwerve(TRUE);
 				Put_Line("................ -> VOLANTAZO [B1]");
 				-- Beep(1);
 			else
 				symptoms.prSymptoms.setSwerve(FALSE); -- Clean symptom
 			end if;
+
+			last_steer := current_steer;
 			
 			Finishing_Notice("CHECK_STEER");
 
@@ -159,6 +167,25 @@ package body add is
 			next_exec := next_exec + interval;
 		end loop;
 	end check_steer;
+
+
+	task body check_head is
+		next_exec     : Time;
+		interval      : Time_Span: = head_interval;
+		current_h     : HeadPosition_Samples_Type;
+		current_steer : Steering_Samples_Type;
+	begin
+		next_exec := Clock + interval;
+		loop
+			Starting_Notice("HEAD");
+
+
+			Finishing_Notice("HEAD");
+			delay until next_exec;
+			next_exec := next_exec + interval;
+		end loop;
+	end check_head;
+
 
 
 	task body display is
