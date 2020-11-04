@@ -289,7 +289,7 @@ package body add is
 				light_st := Off;
 			end if;
 
-			if ((swerve = TRUE) AND (current_s > 40)) then
+			if (swerve = TRUE)  then
 				Beep(1);
 			end if;
 
