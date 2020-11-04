@@ -174,8 +174,10 @@ package body add is
 		interval   : Time_Span                  := head_interval;
 		curr_hp    : HeadPosition_Samples_Type;
 		curr_steer : Steering_Samples_Type;
-		last_hp    : HeadPosition_Samples_Type  := 0;
-		last_steer : Steering_Samples_Type      := 0;
+		steer_x    : Integer;
+		steer_y    : Integer;
+		xover30    : Integer := 0;
+		yover30    : Integer := 0;
 	begin
 		next_exec := Clock + interval;
 		loop
@@ -184,7 +186,30 @@ package body add is
 			Reading_HeadPosition(curr_hp);
 			Reading_Steering(curr_steer);
 
-			if (()) then
+			steer_x := Integer(curr_hp(x));
+			steer_y := Integer(curr_hp(y));
+
+			-- X
+			if ((steer_x >= 30) OR (steer_x <= -30)) then
+				xover30 := xover30 + 1;
+			else
+				xover30 := 0;
+			end if;
+
+			-- Y
+			if (((steer_y >=  30) AND (steer_y <= 0)) OR
+			    ((steer_y <= -30) AND (steer_y >= 0))) then
+				yover30 := yover30 + 1;
+			else
+				yover30 := 0;
+			end if;
+
+
+			if ((xover30 = 2) OR (yover30 = 2)) then
+				-- Activar symptom CABEZA_INCLINADA
+				symptoms.prSymptoms.setLean(TRUE);
+			else
+				symptoms.prSymptoms.setLean(FALSE);
 			end if;
 
 			Finishing_Notice("HEAD");
