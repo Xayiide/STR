@@ -100,17 +100,10 @@ package body add is
 			
 			if (distance < d_riesgo) then
 				symptoms.prSymptoms.setCollision(TRUE);
-				Put_Line("................ -> RIESGO_COLISION [B5]");
-				-- Beep(5);
 			elsif (distance < d_imprud) then
 				symptoms.prSymptoms.setImprdD(TRUE);
-				Put_Line("................ -> DISTANCIA_IMPRUDENTE [L+B4]");
-				-- Light(On);
-				-- Beep(4);
 			elsif (distance < d_insegu) then
 				symptoms.prSymptoms.setUnsafeD(TRUE);
-				Put_Line("................ -> DISTANCIA_INSEGURA [L]");
-				-- Light(On);
 			else
 				symptoms.prSymptoms.setCollision(FALSE);
 				symptoms.prSymptoms.setImprdD(FALSE);
@@ -145,16 +138,12 @@ package body add is
 			Reading_Steering(curr_steer);
 			Reading_Speed(curr_speed);
 
-			Display_Steering(curr_steer);
-
 			l_steer := Integer(last_steer);
 			c_steer := Integer(curr_steer);
 			c_speed := Integer(curr_speed);
 
 			if ((abs(l_steer - c_steer) >= 20) AND (c_speed >= 40)) then
 				symptoms.prSymptoms.setSwerve(TRUE);
-				Put_Line("................ -> VOLANTAZO [B1]");
-				-- Beep(1);
 			else
 				symptoms.prSymptoms.setSwerve(FALSE); -- Clean symptom
 			end if;
