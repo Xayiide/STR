@@ -82,7 +82,7 @@ package body add is
 	begin
 		next_exec := Clock + interval;
 		loop
-			Starting_Notice("CHECK_DISTANCE");
+			Starting_Notice("DIST");
 
 			Reading_Distance(curr_d);
 			Reading_Speed(curr_s);
@@ -117,7 +117,7 @@ package body add is
 				symptoms.prSymptoms.setUnsafeD(FALSE);
 			end if;
 			
-			Finishing_Notice("CHECK_DISTANCE");
+			Finishing_Notice("DIST");
 
 			delay until next_exec;
 			next_exec := next_exec + interval;
@@ -140,7 +140,7 @@ package body add is
 	begin
 		next_exec := Clock + interval;
 		loop
-			Starting_Notice("CHECK_STEER");
+			Starting_Notice("STEER");
 
 			Reading_Steering(curr_steer);
 			Reading_Speed(curr_speed);
@@ -161,7 +161,7 @@ package body add is
 
 			last_steer := curr_steer;
 			
-			Finishing_Notice("CHECK_STEER");
+			Finishing_Notice("STEER");
 
 			delay until next_exec;
 			next_exec := next_exec + interval;
