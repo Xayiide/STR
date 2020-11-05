@@ -22,9 +22,9 @@ package body add is
 	risk_interval  : Time_Span := Milliseconds(150);
 
 	RISKPRIO : constant := 10; -- Highest Prio I guess
-	STERPRIO : constant := 5;
+	HEADPRIO : constant := 5;
 	DISTPRIO : constant := 4;
-	HEADPRIO : constant := 3;
+	STERPRIO : constant := 3;
 	DISPPRIO : constant := 1;
 	
 	light_st  : Light_States := Off;
