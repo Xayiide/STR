@@ -160,11 +160,11 @@ package body add is
 
 	task body check_head is
 		next_exec  : Time;
-		interval   : Time_Span                  := head_interval;
+		interval   : Time_Span := head_interval;
 		curr_hp    : HeadPosition_Samples_Type;
 		curr_steer : Steering_Samples_Type;
-		steer_x    : Integer;
-		steer_y    : Integer;
+		lean_x     : Integer;
+		lean_y     : Integer;
 		xover30    : Integer := 0;
 		yover30    : Integer := 0;
 	begin
@@ -175,19 +175,19 @@ package body add is
 			Reading_HeadPosition(curr_hp);
 			Reading_Steering(curr_steer);
 
-			steer_x := Integer(curr_hp(x));
-			steer_y := Integer(curr_hp(y));
+			lean_x := Integer(curr_hp(x));
+			lean_y := Integer(curr_hp(y));
 
 			-- X
-			if ((steer_x >= 30) OR (steer_x <= -30)) then
+			if ((lean_x >= 30) OR (lean_x <= -30)) then
 				xover30 := xover30 + 1;
 			else
 				xover30 := 0;
 			end if;
 
 			-- Y
-			if (((steer_y >=  30) AND (steer_y <= 0)) OR
-			    ((steer_y <= -30) AND (steer_y >= 0))) then
+			if (((lean_y >=  30) AND (lean_y <= 0)) OR
+			    ((lean_y <= -30) AND (lean_y >= 0))) then
 				yover30 := yover30 + 1;
 			else
 				yover30 := 0;
