@@ -217,7 +217,6 @@ package body add is
 	begin
 		next_exec := Clock + interval;
 		loop
-		
 			Starting_Notice("DISPLAY");
 			symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
 
