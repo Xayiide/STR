@@ -186,8 +186,8 @@ package body add is
 			end if;
 
 			-- Y
-			if (((lean_y >=  30) AND (lean_y <= 0)) OR
-			    ((lean_y <= -30) AND (lean_y >= 0))) then
+			if (((lean_y >=  30) AND (curr_steer <= 0)) OR
+			    ((lean_y <= -30) AND (curr_steer >= 0))) then
 				yover30 := yover30 + 1;
 			else
 				yover30 := 0;
