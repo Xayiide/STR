@@ -67,8 +67,6 @@ package body add is
 	-----------------------------------------------------------------------
 	------------- body of tasks 
 	-----------------------------------------------------------------------
-	-- TODO: Quitar Puts (Deberian ir a Display, excepto tracing)
-	--       Quitar Actuadores [BEEP, Lights] (Deberian ir a Riesgos)
 	task body check_distance is
 		next_exec : Time;
 		interval  : Time_Span := dist_interval;
@@ -118,8 +116,6 @@ package body add is
 	end check_distance;
 
 
-	-- TODO: Quitar Puts (Deberian ir a Display, excepto tracing)
-	--       Quitar Actuadores [BEEP, Lights] (Deberian ir a Riesgos)
 	task body check_steer is
 		next_exec  : Time;
 		interval   : Time_Span := steer_interval;
@@ -145,7 +141,7 @@ package body add is
 			if ((abs(l_steer - c_steer) >= 20) AND (c_speed >= 40)) then
 				symptoms.prSymptoms.setSwerve(TRUE);
 			else
-				symptoms.prSymptoms.setSwerve(FALSE); -- Clean symptom
+				symptoms.prSymptoms.setSwerve(FALSE);
 			end if;
 
 			last_steer := curr_steer;
@@ -195,7 +191,6 @@ package body add is
 
 
 			if ((xover30 = 2) OR (yover30 = 2)) then
-				-- Activar symptom CABEZA_INCLINADA
 				symptoms.prSymptoms.setLean(TRUE);
 			else
 				symptoms.prSymptoms.setLean(FALSE);
@@ -224,13 +219,9 @@ package body add is
 		loop
 		
 			Starting_Notice("DISPLAY");
-			-- Read symptoms protected object
-			-- symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
 			symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
 
 			measurements.readMeasurements(current_d, current_s);
-			-- Reading_Speed(current_s);
-			-- Reading_Distance(current_d);
 
 			Display_Speed(current_s); 
 			Display_Distance(current_d);
@@ -272,7 +263,7 @@ package body add is
 			symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
 			measurements.readMeasurements(current_d, current_s);
 
-			-- Turn off the light here? TODO: check this
+			-- Turn off the light here?
 			if (light_st = On) then
 				Light(Off);
 				light_st := Off;
@@ -303,7 +294,7 @@ package body add is
 				light_st := On;
 				Beep(4);
 			elsif ((light_st = On) AND (unsafeD = FALSE)) then
-				-- Second check to avoid this if to turn off the light for
+				-- Second check to avoid this "if" to turn off the light for
 				-- unsafeD
 				Light(Off);
 				light_st := Off;
