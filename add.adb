@@ -64,9 +64,26 @@ package body add is
 		pragma priority(RISKPRIO);
 	end risks;
 	
+	task kwhetstones is
+		pragma priority(11);
+	end risks;
+	
 	-----------------------------------------------------------------------
 	------------- body of tasks 
 	-----------------------------------------------------------------------
+	task body kwhetstones is
+		wcet_in  : Time;
+		wcet_fin : Time;
+	
+	begin 
+		Starting_Notice("Análisis tiempo");
+		wcet_in  := Clock;
+		Execution_Time(Milliseconds(100));
+		wcet_fin := Clock;
+		Finishing_Notice("Análisis tiempo: " & Duration'Image(To_Duration(wcet_fin-wcet_in)));
+	end kwhetstones;
+	
+	
 	task body check_distance is
 		next_exec : Time;
 		interval  : Time_Span := dist_interval;
@@ -77,8 +94,8 @@ package body add is
 		d_riesgo  : Float;
 		d_imprud  : Float;
 		d_insegu  : Float;
-		wcet_in : Time;
-		wcet_fin : Time;
+		wcet_in   : Time;
+		wcet_fin  : Time;
 
 	begin
 		next_exec := Clock + interval;
@@ -112,7 +129,7 @@ package body add is
 				symptoms.prSymptoms.setUnsafeD(FALSE);
 			end if;
 			
-			wcet_fin:=Clock;
+			wcet_fin := Clock;
 
 			Finishing_Notice("DISTANCIA" & " (wcet:" & Duration'Image(To_Duration(wcet_fin-wcet_in)) & ")");
 
@@ -129,10 +146,10 @@ package body add is
 		curr_steer : Steering_Samples_Type := 0;
 		curr_speed : Speed_Samples_Type    := 0;
 
-		l_steer : Integer;
-		c_steer : Integer;
-		c_speed : Integer;
-		wcet_in : Time;
+		l_steer  : Integer;
+		c_steer  : Integer;
+		c_speed  : Integer;
+		wcet_in  : Time;
 		wcet_fin : Time;
 
 	begin
@@ -156,7 +173,7 @@ package body add is
 
 			last_steer := curr_steer;
 
-			wcet_fin:=Clock;
+			wcet_fin := Clock;
 
 			Finishing_Notice("STEER" & " (wcet:" & Duration'Image(To_Duration(wcet_fin-wcet_in)) & ")");
 
@@ -175,8 +192,8 @@ package body add is
 		lean_y     : Integer;
 		xover30    : Integer := 0;
 		yover30    : Integer := 0;
-		wcet_in : Time;
-		wcet_fin : Time;
+		wcet_in    : Time;
+		wcet_fin   : Time;
 	begin
 		next_exec := Clock + interval;
 		loop
@@ -211,7 +228,7 @@ package body add is
 				symptoms.prSymptoms.setLean(FALSE);
 			end if;
 
-			wcet_fin:=Clock;
+			wcet_fin := Clock;
 
 			Finishing_Notice("HEAD" & " (wcet:" & Duration'Image(To_Duration(wcet_fin-wcet_in)) & ")");
 			delay until next_exec;
@@ -231,8 +248,8 @@ package body add is
 		collision : Boolean;
 		current_s : Speed_Samples_Type;
 		current_d : Distance_Samples_Type;
-		wcet_in : Time;
-		wcet_fin : Time;
+		wcet_in   : Time;
+		wcet_fin  : Time;
 	begin
 		next_exec := Clock + interval;
 		loop
@@ -257,7 +274,7 @@ package body add is
 				then Put_Line(" [DISPLAY] -> RIESGO COLISION");
 			end if;
 
-			wcet_fin:=Clock;
+			wcet_fin := Clock;
 
 			Finishing_Notice("DISPLAY" & " (wcet:" & Duration'Image(To_Duration(wcet_fin-wcet_in)) & ")");
 
@@ -277,8 +294,8 @@ package body add is
 		collision : Boolean;
 		current_s : Speed_Samples_Type;
 		current_d : Distance_Samples_Type;
-		wcet_in : Time;
-		wcet_fin : Time;
+		wcet_in   : Time;
+		wcet_fin  : Time;
 	begin
 		next_exec := Clock + interval;
 		loop
@@ -329,7 +346,7 @@ package body add is
 				Beep(5);
 			end if;
 
-			wcet_fin:=Clock;
+			wcet_fin := Clock;
 
 			Finishing_Notice("RISKS" & " (wcet:" & Duration'Image(To_Duration(wcet_fin-wcet_in)) & ")");
 			delay until next_exec;
