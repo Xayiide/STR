@@ -66,7 +66,7 @@ package body add is
 	
 	task kwhetstones is
 		pragma priority(11);
-	end risks;
+	end kwhetstones;
 	
 	-----------------------------------------------------------------------
 	------------- body of tasks 
