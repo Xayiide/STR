@@ -1,3 +1,6 @@
+with devices; use devices;
+with Tools; use Tools;
+with Ada.Real_Time; use Ada.Real_Time;
 
 package symptoms is
 	protected prSymptoms is

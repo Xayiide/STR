@@ -2,18 +2,21 @@ package body symptoms is
 	protected body prSymptoms is
 		procedure setSwerve (S: in Boolean) is
 		begin
+			Execution_Time(Milliseconds(5));
 			swerve := S;
 		end setSwerve;
 		
 		
 		procedure setLean  (L: in Boolean) is
 		begin
+			Execution_Time(Milliseconds(2));
 			lean := L;
 		end setLean;
 		
 		
 		procedure setUnsafeD (U: in  Boolean) is
 		begin
+			Execution_Time(Milliseconds(3));
 			unsafeD := U;
 			if (U = TRUE) then
 				imprdD    := FALSE;
@@ -24,6 +27,7 @@ package body symptoms is
 		
 		procedure setImprdD (I: in  Boolean) is
 		begin
+			Execution_Time(Milliseconds(4));
 			imprdD := I;
 			if (I = TRUE) then
 				unsafeD   := FALSE;
@@ -34,6 +38,7 @@ package body symptoms is
 		
 		procedure setCollision (C: in  Boolean) is
 		begin
+			Execution_Time(Milliseconds(6));
 			collision := C;
 			if (C = TRUE) then
 				unsafeD := FALSE;
@@ -47,30 +52,35 @@ package body symptoms is
 		
 		procedure getSwerve (S: out Boolean) is
 		begin
+			Execution_Time(Milliseconds(5));
 			S := swerve;
 		end getSwerve;
 		
 		
 		procedure getLean (L: out Boolean) is
 		begin
+			Execution_Time(Milliseconds(2));
 			L := lean;
 		end getLean;
 		
 		
 		procedure getUnsafeD (U: out Boolean) is
 		begin
+			Execution_Time(Milliseconds(3));
 			U := unsafeD;
 		end getUnsafeD;
 		
 		
 		procedure getImprdD (I: out Boolean) is
 		begin
+			Execution_Time(Milliseconds(6));
 			I := imprdD;
 		end getImprdD;
 		
 		
 		procedure getCollision (C: out Boolean) is
 		begin
+			Execution_Time(Milliseconds(7));
 			C := collision;
 		end getCollision;
 		
@@ -82,6 +92,7 @@ package body symptoms is
 						   I : Out Boolean;
 						   C : Out Boolean) is
 	begin
+		Execution_Time(Milliseconds(8));
 		prSymptoms.getSwerve(S);
 		prSymptoms.getLean(L);
 		prSymptoms.getUnsafeD(U);
