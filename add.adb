@@ -64,41 +64,40 @@ package body add is
 		pragma priority(RISKPRIO);
 	end risks;
 
-	task kwhetstones is
-		pragma priority(15);
-	end kwhetstones;
+	-- task kwhetstones is
+	-- 	pragma priority(15);
+	-- end kwhetstones;
 	
 	-----------------------------------------------------------------------
 	------------- body of tasks 
 	-----------------------------------------------------------------------
-	task body kwhetstones is
-		wcet_in: Time;
-		wcet_fin: Time;
-
-	begin
-		Starting_Notice("Análisis de tiempo");
-		wcet_in := Clock;
-		Execution_Time(Milliseconds(100));
-		wcet_fin := Clock;
-		Finishing_Notice("Análisis tiempo: " & Duration'Image(To_Duration(wcet_fin-wcet_in)));
-	end kwhetstones;
+	-- task body kwhetstones is
+	-- 	wcet_in: Time;
+	-- 	wcet_fin: Time;
+	-- begin
+	-- 	Starting_Notice("Análisis de tiempo");
+	-- 	wcet_in := Clock;
+	-- 	Execution_Time(Milliseconds(100));
+	-- 	wcet_fin := Clock;
+	-- 	Finishing_Notice("Análisis tiempo: " & Duration'Image(To_Duration(wcet_fin-wcet_in)));
+	-- end kwhetstones;
 
 
 	task body check_distance is
-		next_exec : Time;
-		interval  : Time_Span := dist_interval;
-		curr_d    : Distance_Samples_Type := 0;
-		curr_s    : Speed_Samples_Type    := 0;
-		distance  : Float;
-		speed     : Float;
-		d_riesgo  : Float;
-		d_imprud  : Float;
-		d_insegu  : Float;
-		wcet_in : Time;
-		wcet_fin : Time;
-		medidas_in : Time;
-		medidas_fin: Time;
-		sintomas_in : Time;
+		next_exec    : Time;
+		interval     : Time_Span             : = dist_interval;
+		curr_d       : Distance_Samples_Type : = 0;
+		curr_s       : Speed_Samples_Type    : = 0;
+		distance     : Float;
+		speed        : Float;
+		d_riesgo     : Float;
+		d_imprud     : Float;
+		d_insegu     : Float;
+		wcet_in      : Time;
+		wcet_fin     : Time;
+		medidas_in   : Time;
+		medidas_fin  : Time;
+		sintomas_in  : Time;
 		sintomas_fin : Time;
 
 	begin
@@ -157,12 +156,12 @@ package body add is
 		curr_steer : Steering_Samples_Type := 0;
 		curr_speed : Speed_Samples_Type    := 0;
 
-		l_steer : Integer;
-		c_steer : Integer;
-		c_speed : Integer;
-		wcet_in : Time;
-		wcet_fin : Time;
-		sintomas_in : Time;
+		l_steer      : Integer;
+		c_steer      : Integer;
+		c_speed      : Integer;
+		wcet_in      : Time;
+		wcet_fin     : Time;
+		sintomas_in  : Time;
 		sintomas_fin : Time;
 
 	begin
@@ -202,19 +201,19 @@ package body add is
 
 
 	task body check_head is
-		next_exec  : Time;
-		interval   : Time_Span := head_interval;
-		curr_hp    : HeadPosition_Samples_Type;
-		curr_steer : Steering_Samples_Type;
-		lean_x     : Integer;
-		lean_y     : Integer;
-		xover30    : Integer := 0;
-		yover30    : Integer := 0;
-		wcet_in : Time;
-		wcet_fin : Time;
-		medidas_in : Time;
-		medidas_fin: Time;
-		sintomas_in : Time;
+		next_exec    : Time;
+		interval     : Time_Span : = head_interval;
+		curr_hp      : HeadPosition_Samples_Type;
+		curr_steer   : Steering_Samples_Type;
+		lean_x       : Integer;
+		lean_y       : Integer;
+		xover30      : Integer   : = 0;
+		yover30      : Integer   : = 0;
+		wcet_in      : Time;
+		wcet_fin     : Time;
+		medidas_in   : Time;
+		medidas_fin  : Time;
+		sintomas_in  : Time;
 		sintomas_fin : Time;
 	begin
 		next_exec := Clock + interval;
@@ -265,20 +264,20 @@ package body add is
 
 
 	task body display is
-		next_exec : Time;
-		interval  : Time_Span := disp_interval;
-		swerve    : Boolean;
-		lean      : Boolean;
-		unsafeD   : Boolean;
-		imprdD    : Boolean;
-		collision : Boolean;
-		current_s : Speed_Samples_Type;
-		current_d : Distance_Samples_Type;
-		wcet_in : Time;
-		wcet_fin : Time;
-		medidas_in : Time;
-		medidas_fin: Time;
-		sintomas_in : Time;
+		next_exec    : Time;
+		interval     : Time_Span : = disp_interval;
+		swerve       : Boolean;
+		lean         : Boolean;
+		unsafeD      : Boolean;
+		imprdD       : Boolean;
+		collision    : Boolean;
+		current_s    : Speed_Samples_Type;
+		current_d    : Distance_Samples_Type;
+		wcet_in      : Time;
+		wcet_fin     : Time;
+		medidas_in   : Time;
+		medidas_fin  : Time;
+		sintomas_in  : Time;
 		sintomas_fin : Time;
 	begin
 		next_exec := Clock + interval;
@@ -322,20 +321,20 @@ package body add is
 
 
 	task body risks is
-		next_exec : Time;
-		interval  : Time_Span := risk_interval;	
-		swerve    : Boolean;
-		lean      : Boolean;
-		unsafeD   : Boolean;
-		imprdD    : Boolean;
-		collision : Boolean;
-		current_s : Speed_Samples_Type;
-		current_d : Distance_Samples_Type;
-		wcet_in : Time;
-		wcet_fin : Time;
-		medidas_in : Time;
-		medidas_fin: Time;
-		sintomas_in : Time;
+		next_exec    : Time;
+		interval     : Time_Span : = risk_interval;
+		swerve       : Boolean;
+		lean         : Boolean;
+		unsafeD      : Boolean;
+		imprdD       : Boolean;
+		collision    : Boolean;
+		current_s    : Speed_Samples_Type;
+		current_d    : Distance_Samples_Type;
+		wcet_in      : Time;
+		wcet_fin     : Time;
+		medidas_in   : Time;
+		medidas_fin  : Time;
+		sintomas_in  : Time;
 		sintomas_fin : Time;
 	begin
 		next_exec := Clock + interval;
