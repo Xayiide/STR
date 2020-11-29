@@ -140,7 +140,7 @@ package body add is
 			
 			wcet_fin:=Clock;
 
-			Finishing_Notice("DISTANCE" & " (wcet:" & Duration'Image(To_Duration(wcet_fin-wcet_in)) & ")," & " (sintomas:" & 
+			Finishing_Notice("DIST" & " (wcet:" & Duration'Image(To_Duration(wcet_fin-wcet_in)) & ")," & " (sintomas:" & 
 			Duration'Image(To_Duration(sintomas_fin-sintomas_in)) & ")," & " (medidas:" & Duration'Image(To_Duration(medidas_fin-medidas_in)) & ")" );
 
 			delay until next_exec;
