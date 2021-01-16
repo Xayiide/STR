@@ -94,12 +94,6 @@ package body add is
 		d_riesgo  : Float;
 		d_imprud  : Float;
 		d_insegu  : Float;
-		wcet_in : Time;
-		wcet_fin : Time;
-		medidas_in : Time;
-		medidas_fin: Time;
-		sintomas_in : Time;
-		sintomas_fin : Time;
 
 	begin
 		next_exec := Clock + interval;
@@ -110,11 +104,6 @@ package body add is
 			Reading_Distance(curr_d);
 			Reading_Speed(curr_s);
 
-			medidas_in := Clock;
-			measurements.prMeasurements.setmdistance(curr_d);
-			measurements.prMeasurements.setmspeed(curr_s);
-			medidas_fin := Clock;	
-			
 			-- Display_Distance(current_d);
 			-- Display_Speed(current_s);
 
@@ -125,7 +114,6 @@ package body add is
 			d_imprud := (((speed/10.0)**2)/2.0);
 			d_insegu := (((speed/10.0)**2));
 			
-			sintomas_in := Clock;
 			if (distance < d_riesgo) then
 				symptoms.prSymptoms.setCollision(TRUE);
 			elsif (distance < d_imprud) then
@@ -137,12 +125,8 @@ package body add is
 				symptoms.prSymptoms.setImprdD(FALSE);
 				symptoms.prSymptoms.setUnsafeD(FALSE);
 			end if;
-			sintomas_fin:=Clock;
-			
-			wcet_fin:=Clock;
 
-			Finishing_Notice("DISTANCE" & " (wcet:" & Duration'Image(To_Duration(wcet_fin-wcet_in)) & ")," & " (sintomas:" & 
-			Duration'Image(To_Duration(sintomas_fin-sintomas_in)) & ")," & " (medidas:" & Duration'Image(To_Duration(medidas_fin-medidas_in)) & ")" );
+			Finishing_Notice("DISTANCE");
 
 			delay until next_exec;
 			next_exec := next_exec + interval;
@@ -160,16 +144,11 @@ package body add is
 		l_steer : Integer;
 		c_steer : Integer;
 		c_speed : Integer;
-		wcet_in : Time;
-		wcet_fin : Time;
-		sintomas_in : Time;
-		sintomas_fin : Time;
 
 	begin
 		next_exec := Clock + interval;
 		loop
 			Starting_Notice("STEER");
-			wcet_in := Clock;
 
 			Reading_Steering(curr_steer);
 			Reading_Speed(curr_speed);
@@ -178,22 +157,15 @@ package body add is
 			c_steer := Integer(curr_steer);
 			c_speed := Integer(curr_speed);
 
-			sintomas_in := Clock;
-
 			if ((abs(l_steer - c_steer) >= 20) AND (c_speed >= 40)) then
 				symptoms.prSymptoms.setSwerve(TRUE);
 			else
 				symptoms.prSymptoms.setSwerve(FALSE);
 			end if;
-			
-			sintomas_fin := Clock;
 
 			last_steer := curr_steer;
 
-			wcet_fin:=Clock;
-
-			Finishing_Notice("STEER" & " (wcet:" & Duration'Image(To_Duration(wcet_fin-wcet_in)) & ")," & " (sintomas:" & 
-			Duration'Image(To_Duration(sintomas_fin-sintomas_in)) & ")");
+			Finishing_Notice("STEER");
 
 			delay until next_exec;
 			next_exec := next_exec + interval;
@@ -210,17 +182,11 @@ package body add is
 		lean_y     : Integer;
 		xover30    : Integer := 0;
 		yover30    : Integer := 0;
-		wcet_in : Time;
-		wcet_fin : Time;
-		medidas_in : Time;
-		medidas_fin: Time;
-		sintomas_in : Time;
-		sintomas_fin : Time;
+
 	begin
 		next_exec := Clock + interval;
 		loop
 			Starting_Notice("HEAD");
-			wcet_in := Clock;
 
 			Reading_HeadPosition(curr_hp);
 			Reading_Steering(curr_steer);
@@ -243,7 +209,6 @@ package body add is
 				yover30 := 0;
 			end if;
 
-			sintomas_in := Clock;
 
 			if ((xover30 = 2) OR (yover30 = 2)) then
 				symptoms.prSymptoms.setLean(TRUE);
@@ -251,12 +216,8 @@ package body add is
 				symptoms.prSymptoms.setLean(FALSE);
 			end if;
 			
-			sintomas_fin := Clock;
+			Finishing_Notice("HEAD");
 
-			wcet_fin:=Clock;
-
-			Finishing_Notice("HEAD" & " (wcet:" & Duration'Image(To_Duration(wcet_fin-wcet_in)) & ")," & " (sintomas:" & 
-			Duration'Image(To_Duration(sintomas_fin-sintomas_in)) & ")");
 			delay until next_exec;
 			next_exec := next_exec + interval;
 		end loop;
@@ -274,26 +235,14 @@ package body add is
 		collision : Boolean;
 		current_s : Speed_Samples_Type;
 		current_d : Distance_Samples_Type;
-		wcet_in : Time;
-		wcet_fin : Time;
-		medidas_in : Time;
-		medidas_fin: Time;
-		sintomas_in : Time;
-		sintomas_fin : Time;
+
 	begin
 		next_exec := Clock + interval;
 		loop
 			Starting_Notice("DISPLAY");
-			wcet_in := Clock;
 
-			sintomas_in := Clock;
 			symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
-			sintomas_fin := Clock;
-
-
-			medidas_in:=Clock;
 			measurements.readMeasurements(current_d, current_s);
-			medidas_fin:= Clock;
 
 			Display_Speed(current_s); 
 			Display_Distance(current_d);
@@ -310,10 +259,7 @@ package body add is
 				then Put_Line(" [DISPLAY] -> RIESGO COLISION");
 			end if;
 
-			wcet_fin:=Clock;
-
-			Finishing_Notice("DISPLAY" & " (wcet:" & Duration'Image(To_Duration(wcet_fin-wcet_in)) & ")," & " (sintomas:" & 
-			Duration'Image(To_Duration(sintomas_fin-sintomas_in)) & ")," & " (medidas:" & Duration'Image(To_Duration(medidas_fin-medidas_in)) & ")" );
+			Finishing_Notice("DISPLAY");
 
 			delay until next_exec;
 			next_exec := next_exec + interval;
@@ -331,25 +277,14 @@ package body add is
 		collision : Boolean;
 		current_s : Speed_Samples_Type;
 		current_d : Distance_Samples_Type;
-		wcet_in : Time;
-		wcet_fin : Time;
-		medidas_in : Time;
-		medidas_fin: Time;
-		sintomas_in : Time;
-		sintomas_fin : Time;
+
 	begin
 		next_exec := Clock + interval;
 		loop
 			Starting_Notice("RISKS");
-			wcet_in := Clock;
 
-			sintomas_in := Clock;
 			symptoms.readSymptoms(swerve, lean, unsafeD, imprdD, collision);
-			sintomas_fin := Clock;
-
-			medidas_in := Clock;
 			measurements.readMeasurements(current_d, current_s);
-			medidas_fin := Clock;
 
 			-- Turn off the light here?
 			if (light_st = On) then
@@ -393,10 +328,8 @@ package body add is
 				Beep(5);
 			end if;
 
-			wcet_fin:=Clock;
 
-			Finishing_Notice("RISKS" & " (wcet:" & Duration'Image(To_Duration(wcet_fin-wcet_in)) & ")," & " (sintomas:" & 
-			Duration'Image(To_Duration(sintomas_fin-sintomas_in)) & ")," & " (medidas:" & Duration'Image(To_Duration(medidas_fin-medidas_in)) & ")" );
+			Finishing_Notice("RISKS");
 
 			delay until next_exec;
 			next_exec := next_exec + interval;
@@ -416,6 +349,7 @@ package body add is
 		Current_O: Eyes_Samples_Type := (70,70);
 		Current_E: EEG_Samples_Type := (1,1,1,1,1,1,1,1,1,1);
 		Current_S: Steering_Samples_Type := 0;
+
 	begin
 		Starting_Notice ("Prueba_Dispositivo");
 		
